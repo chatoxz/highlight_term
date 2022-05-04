@@ -12,7 +12,6 @@ $('document').ready(function(){
     });
 
     //check the number of messages and if it changes check all the messages again
-    var n_messages = $("[class^=_message_]").length;
     var interval = setInterval(function(){
         //If inside the message tab, check the messages
         if (window.location.href.indexOf('/inbox') > 0) {
@@ -22,12 +21,11 @@ $('document').ready(function(){
         if (window.location.href.indexOf('/replies') > 0) {
             check_replies();
         }
-
         //If inside the POSTS tab, check the replies
         if (window.location.href.indexOf('/archive') > 0) {
             check_posts();
         }
-    }, 4000);
+    }, 3000);
 });
 
 
