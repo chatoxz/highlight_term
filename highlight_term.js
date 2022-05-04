@@ -1,7 +1,5 @@
 var $ = window.jQuery;
 
-
-
 //css
 var sheet = document.createElement('style');
 sheet.innerHTML = "";
