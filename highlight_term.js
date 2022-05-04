@@ -1,15 +1,17 @@
 var $ = window.jQuery;
 
-//lowercase the array
-icim_dictionary = icim_dictionary.map(element => {
-    return element.toLowerCase();
-});
+
 
 //css
 var sheet = document.createElement('style');
 sheet.innerHTML = "";
 
 $('document').ready(function(){
+    //lowercase the array
+    icim_dictionary = icim_dictionary.map(element => {
+        return element.toLowerCase();
+    });
+
     //check the number of messages and if it changes check all the messages again
     var n_messages = $("[class^=_message_]").length;
     var interval = setInterval(function(){
