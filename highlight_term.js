@@ -3,6 +3,7 @@ var $ = window.jQuery;
 //css
 var sheet = document.createElement('style');
 sheet.innerHTML = "";
+var icon_messages = '<svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSvgIcon-root css-1shn170" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="LocationSearchingIcon" tabindex="-1" title="LocationSearching"><path d="M20.94 11c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"></path></svg>';
 
 $('document').ready(function(){
     //lowercase the array
@@ -15,12 +16,7 @@ $('document').ready(function(){
     var interval = setInterval(function(){
         //If inside the message tab, check the messages
         if (window.location.href.indexOf('/inbox') > 0) {
-            //console.log(n_messages != $("[class^=_messageDivider_]").length);
-            if(n_messages != $("[class^=_message_]").length) {
-                n_messages = $("[class^=_message_]").length;
-                //console.log("inside /inbox");
-                check_messages();
-            }
+            check_messages();
         }
         //If inside the REPLIES tab, check the replies
         if (window.location.href.indexOf('/replies') > 0) {
@@ -31,16 +27,16 @@ $('document').ready(function(){
         if (window.location.href.indexOf('/archive') > 0) {
             check_posts();
         }
-    }, 5000);
+    }, 4000);
 });
 
 
 
 //SCROLL TO THE MESSAGE WHEN CLICKING ON THE MATCHED TERM
 $(document).on("click",".term_match", function(){
-    var index = [].indexOf.call($(".term_match." + $(this).text().trim()), $(this)[0]);
-    var scrollTo = $(".message_selected." + $(this).text().trim())[index].offsetTop;
-    $("[class^=_messages_]")[0].scrollTo({ top: scrollTo - 70, behavior: 'smooth'});
+    var index = [].indexOf.call($(".term_match." + $(this).text().trim().replace(/[^a-z0-9]/gi, '_')), $(this)[0]);
+    var scrollTo = $(".message_selected." + $(this).text().trim().replace(/[^a-z0-9]/gi, '_'))[index].offsetTop;
+    $("[class^=_messages_]")[0].scrollTo({ top: scrollTo - 100, behavior: 'smooth'});
 });
 
 function check_messages(){
@@ -52,13 +48,11 @@ function check_messages(){
     icim_dictionary.forEach(function(dictionary_item) {
         messages_body.each(function(i, obj) {
             if($(this).text().toLowerCase().includes(dictionary_item)){
-                //$(this).siblings().addClass("message_selected");
-                if(!$(this).hasClass('message_selected.' + dictionary_item.trim())){
-                    $(this).addClass('message_selected ' + dictionary_item.trim());
+                if(!$(this).hasClass('message_selected.' + dictionary_item.trim().replace(/[^a-z0-9]/gi, '_'))){
+                    $(this).addClass('message_selected ' + dictionary_item.trim().replace(/[^a-z0-9]/gi, '_'));
                 }
-                //$("[class^='_message_']:contains(" + dictionary_item + "), [class^='_message_']:contains(" + dictionary_item.toLowerCase() + ") ").find("[class^=_messageBody_] p").addClass('message_selected ' + dictionary_item.trim());
-                if( $("." + dictionary_item.trim() ).length > 0 ){
-                    words += ' - <a class= "term_match ' + dictionary_item.trim() + '">' + dictionary_item.trim() + '</a>';
+                if( $("." + dictionary_item.trim().replace(/[^a-z0-9]/gi, '_') ).length > 0 ){
+                    words += ' - <a class= "term_match ' + dictionary_item.trim().replace(/[^a-z0-9]/gi, '_') + '">' + dictionary_item.trim() + '</a>';
                 }
                 //Add the box at the top of the messages container
                 if($("#highlight_box").length == 0){
@@ -74,8 +68,6 @@ function check_messages(){
     });
 }
 
-//var icon_messages = '<svg class="message_icon MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiBox-root css-uqopch" focusable="false" viewBox="0 0 24 24" aria-hidden="true" data-testid="MessageIcon"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 12H6v-2h12v2zm0-3H6V9h12v2zm0-3H6V6h12v2z"></path></svg>';
-var icon_messages = '<svg class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium MuiSvgIcon-root css-1shn170" focusable="false" aria-hidden="true" viewBox="0 0 24 24" data-testid="LocationSearchingIcon" tabindex="-1" title="LocationSearching"><path d="M20.94 11c-.46-4.17-3.77-7.48-7.94-7.94V1h-2v2.06C6.83 3.52 3.52 6.83 3.06 11H1v2h2.06c.46 4.17 3.77 7.48 7.94 7.94V23h2v-2.06c4.17-.46 7.48-3.77 7.94-7.94H23v-2h-2.06zM12 19c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7z"></path></svg>';
 
 /*REPLIES CODE REPLIES CODE REPLIES CODE REPLIES CODE REPLIES CODE REPLIES CODE REPLIES CODE REPLIES CODE REPLIES CODE REPLIES CODE REPLIES CODE REPLIES CODE REPLIES CODE */
 function check_replies(){
@@ -88,7 +80,7 @@ function check_replies(){
                 $(this).addClass('message_selected ' + item.trim());
             }
         });
-        if( $("." + item.trim() ).length > 0 ){
+        if( $("." + item.trim().replace(/\s/g, '') ).length > 0 ){
             words += ' - <a class= "term_match_replies">' + item + '</a>';
         }
         //Add the box at the top of the messages container
