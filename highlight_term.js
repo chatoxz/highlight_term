@@ -37,6 +37,7 @@ $(document).on("click",".term_match", function(){
     $("[class^=_messages_]")[0].scrollTo({ top: scrollTo - 100, behavior: 'smooth'});
 });
 
+/*MESSAGES CODE MESSAGES CODE MESSAGES CODE MESSAGES CODE MESSAGES CODE MESSAGES CODE MESSAGES CODE MESSAGES CODE MESSAGES CODE MESSAGES CODE MESSAGES CODE MESSAGES CODE */
 function check_messages(){
     console.log("Checking for Harm to Minors messages");
     if($("#highlight_box span").length > 0 ){ $("#highlight_box span").html("Checking") };
@@ -104,12 +105,12 @@ function check_posts(){
         posts.each(function(i, obj) {
             //if matches found highlight post
             if($(this).find("section:not([class*=_postBlogName])").text().toLowerCase().includes(dictionary_item)){
-                if(!$(this).hasClass('post_selected.' + dictionary_item.trim())){
-                    $(this).addClass('post_selected ' + dictionary_item.trim());                   
+                if(!$(this).hasClass('post_selected.' + dictionary_item.trim().replace(/[^a-z0-9]/gi, '_'))){
+                    $(this).addClass('post_selected ' + dictionary_item.trim().replace(/[^a-z0-9]/gi, '_'));                    
                 }
                 //add term found to the list
-                if( $("." + dictionary_item.trim() ).length > 0 ){
-                    words += ' - <a class="term_match_post ' + dictionary_item.trim() + '">' + dictionary_item.trim() + '</a>';
+                if( $("." + dictionary_item.trim().replace(/[^a-z0-9]/gi, '_') ).length > 0 ){
+                    words += ' - <a class="term_match_post ' + dictionary_item.trim().replace(/[^a-z0-9]/gi, '_') + '">' + dictionary_item.trim() + '</a>';
                 }
             }
         });
@@ -129,14 +130,14 @@ function check_posts(){
 
 //scroll to the posts when clicking the term on the top bar
 $(document).on("click",".term_match_post", function(){
-    console.log("go to posts");
-    var index = [].indexOf.call($(".term_match_post." + $(this).text().trim()), $(this)[0]);
-    var scrollTo = $(".post_selected." + $(this).text().trim())[index].offsetTop;
+    var term_class = $(this).text().trim().replace(/[^a-z0-9]/gi, '_');
+    var index = [].indexOf.call($(".term_match_post." + term_class), $(this)[0]);
+    var scrollTo = $(".post_selected." + term_class)[index].offsetTop;
     window.scrollTo({ top: scrollTo - 30, behavior: 'smooth'}); // 'smooth' 'instant'
 
-    $($(".post_selected." + $(this).text().trim())[index]).addClass("highlight");
+    $($(".post_selected." + term_class)[index]).addClass("highlight");
     setTimeout(function () {
-        $($(".post_selected." + $(this).text().trim())[index]).removeClass('highlight');
+        $($(".post_selected." + term_class)[index]).removeClass('highlight');
     }, 3100);
 });
 
